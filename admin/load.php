@@ -2,7 +2,11 @@
 	die( 'Direct access forbidden.' );
 }
 
-add_action( 'wp_loaded', 'brizy_load_admin' );
+
+if(is_user_logged_in())
+{
+	add_action( 'wp_loaded', 'brizy_load_admin' );
+}
 
 
 function brizy_add_dashboard_widgets() {
