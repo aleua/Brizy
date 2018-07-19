@@ -52,6 +52,7 @@ function brizy_initialize_Brizy_Public_Api() {
 
 
 		$api_instance = new Brizy_Editor_API( $project, $post );
+		new Brizy_Editor_BlockScreenshot();
 
 	} catch ( Exception $e ) {
 		Brizy_Logger::instance()->exception( $e );
