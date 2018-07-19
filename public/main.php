@@ -103,6 +103,8 @@ class Brizy_Public_Main {
 		wp_register_script( 'brizy-editor-vendor', "${assets_url}/editor/js/editor.vendor.js", array('jquery'), null, true );
 		wp_enqueue_script( 'brizy-editor', "${assets_url}/editor/js/editor.js", array('brizy-editor-vendor', 'brizy-editor-polyfill'), null, true );
 		wp_add_inline_script( 'brizy-editor', "var __VISUAL_CONFIG__ = JSON.parse('${config_json}')", 'before' );
+
+		do_action('brizy_enqueue_scripts');
 	}
 
 	/**
