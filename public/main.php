@@ -46,7 +46,6 @@ class Brizy_Public_Main {
 	}
 
 	public function initialize_front_end() {
-
 		if ( $this->is_editing_page_with_editor() && Brizy_Editor::is_user_allowed() ) {
 			add_action( 'template_include', array( $this, 'template_include' ), 10000 );
 		} elseif ( $this->is_editing_page_with_editor_on_iframe() && Brizy_Editor::is_user_allowed() ) {
@@ -104,7 +103,7 @@ class Brizy_Public_Main {
 		wp_enqueue_script( 'brizy-editor', "${assets_url}/editor/js/editor.js", array('brizy-editor-vendor', 'brizy-editor-polyfill'), null, true );
 		wp_add_inline_script( 'brizy-editor', "var __VISUAL_CONFIG__ = JSON.parse('${config_json}')", 'before' );
 
-		do_action('brizy_enqueue_scripts');
+		do_action('brizy_editor_enqueue_scripts');
 	}
 
 	/**
