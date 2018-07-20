@@ -112,6 +112,7 @@ class Brizy_Editor_Editor_Editor {
 			'wp'              => array(
 				'permalink'       => get_permalink( $wp_post_id ),
 				'page'            => $wp_post_id,
+				'featuredImage'   => get_the_post_thumbnail_url( $wp_post_id ),
 				'pageAttachments' => array( 'images' => $this->get_page_attachments() ),
 				'templates'       => $templates,
 				'api'             => array(
