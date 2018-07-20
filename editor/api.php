@@ -31,6 +31,8 @@ class Brizy_Editor_API {
 	const AJAX_DOWNLOAD_MEDIA = 'brizy_download_media';
 	const AJAX_MEDIA_METAKEY = 'brizy_get_media_key';
 
+	const AJAX_SET_FEATURED_IMAGE = 'brizy_set_featured_image';
+
 	/**
 	 * @var Brizy_Editor_Project
 	 */
@@ -100,12 +102,26 @@ class Brizy_Editor_API {
 				'update_form_integrations_status'
 			) );
 			add_action( 'wp_ajax_' . self::AJAX_DELETE_FORM, array( $this, 'delete_form' ) );
+			add_action( 'wp_ajax_' . self::AJAX_SET_FEATURED_IMAGE, array( $this, 'set_featured_image' ) );
 
 		}
 
 		add_action( 'wp_ajax_' . self::AJAX_SUBMIT_FORM, array( $this, 'submit_form' ) );
 		add_action( 'wp_ajax_nopriv_' . self::AJAX_SUBMIT_FORM, array( $this, 'submit_form' ) );
 	}
+
+	public function set_featured_image() {
+		$this->authorize();
+
+		if ( ! isset( $_REQUEST['post_id'] ) || ! isset( $_REQUEST['attachment_id'] ) ) {
+			$this->error( 400, 'Bad request' );
+		}
+
+		set_post_thumbnail( (int) $_REQUEST['post_id'], (int) $_REQUEST['attachment_id'] );
+
+		$this->success( null );
+	}
+
 
 	public function default_form() {
 		try {
@@ -395,7 +411,7 @@ class Brizy_Editor_API {
 	public function get_item() {
 		try {
 			$this->authorize();
-			$post_arr = self::create_post_arr( $this->post );
+			$post_arr             = self::create_post_arr( $this->post );
 			$post_arr['is_index'] = true; // this is for the case when the page we return is not an index page.. but the editor wants one.
 			$this->success( array( $post_arr ) );
 		} catch ( Exception $exception ) {
@@ -594,7 +610,7 @@ class Brizy_Editor_API {
 
 	private function authorize() {
 		if ( ! wp_verify_nonce( $_REQUEST['hash'], self::nonce ) ) {
-			throw new Brizy_Editor_Exceptions_AccessDenied();
+			wp_send_json_error( array( 'code' => 400, 'message' => 'Bad request' ), 400 );
 		}
 	}
 

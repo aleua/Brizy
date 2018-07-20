@@ -138,6 +138,7 @@ class Brizy_Editor_Editor_Editor {
 					'getTerms'         => Brizy_Editor_API::AJAX_GET_TERMS,
 					'downloadMedia'    => Brizy_Editor_API::AJAX_DOWNLOAD_MEDIA,
 					'getMediaUid'      => Brizy_Editor_API::AJAX_MEDIA_METAKEY,
+					'setFeaturedImage' => Brizy_Editor_API::AJAX_SET_FEATURED_IMAGE,
 				),
 				'plugins'         => array(
 					'dummy'       => true,
@@ -145,7 +146,7 @@ class Brizy_Editor_Editor_Editor {
 				),
 				'hasSidebars'     => count( $wp_registered_sidebars ) > 0,
 				'l10n'            => Brizy_Languages_Texts::get_editor_texts(),
-				'pageData'    => apply_filters( 'brizy_page_data', array() )
+				'pageData'        => apply_filters( 'brizy_page_data', array() )
 			),
 			'applications'    => array(
 				'form' => array(
@@ -163,7 +164,7 @@ class Brizy_Editor_Editor_Editor {
 	private function get_page_attachments() {
 		global $wpdb;
 		$query = $wpdb->prepare(
-		"SELECT 
+			"SELECT 
 					pm.*
 				FROM 
 					{$wpdb->prefix}postmeta pm 
@@ -171,7 +172,7 @@ class Brizy_Editor_Editor_Editor {
 				WHERE pm.meta_key='brizy_attachment_uid'
 				GROUP BY pm.post_id", $this->post->get_uid() );
 
-		$results = $wpdb->get_results( $query  );
+		$results         = $wpdb->get_results( $query );
 		$attachment_data = array();
 		foreach ( $results as $row ) {
 			$attachment_data[ $row->meta_value ] = true;
