@@ -32,6 +32,7 @@ class Brizy_Editor_API {
 	const AJAX_MEDIA_METAKEY = 'brizy_get_media_key';
 
 	const AJAX_SET_FEATURED_IMAGE = 'brizy_set_featured_image';
+	const AJAX_REMOVE_FEATURED_IMAGE = 'brizy_remove_featured_image';
 
 	/**
 	 * @var Brizy_Editor_Project
@@ -103,6 +104,7 @@ class Brizy_Editor_API {
 			) );
 			add_action( 'wp_ajax_' . self::AJAX_DELETE_FORM, array( $this, 'delete_form' ) );
 			add_action( 'wp_ajax_' . self::AJAX_SET_FEATURED_IMAGE, array( $this, 'set_featured_image' ) );
+			add_action( 'wp_ajax_' . self::AJAX_REMOVE_FEATURED_IMAGE, array( $this, 'remove_featured_image' ) );
 
 		}
 
@@ -117,9 +119,29 @@ class Brizy_Editor_API {
 			$this->error( 400, 'Bad request' );
 		}
 
-		set_post_thumbnail( (int) $_REQUEST['post_id'], (int) $_REQUEST['attachment_id'] );
+		if($this->post->uses_editor())
+		{
+			set_post_thumbnail( (int) $_REQUEST['post_id'], (int) $_REQUEST['attachment_id'] );
+			$this->success( null );
+		}
 
-		$this->success( null );
+		$this->error( 400, 'Invalid post' );
+	}
+
+	public function remove_featured_image() {
+		$this->authorize();
+
+		if ( ! isset( $_REQUEST['post_id'] )  ) {
+			$this->error( 400, 'Bad request' );
+		}
+
+		if($this->post->uses_editor())
+		{
+			delete_post_thumbnail( (int) $_REQUEST['post_id'] );
+			$this->success( null );
+		}
+
+		$this->error( 400, 'Invalid post' );
 	}
 
 
